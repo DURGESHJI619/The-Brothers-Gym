@@ -340,10 +340,29 @@ async function bootstrap() {
     applyContactLinks();
   }, 100);
 
+setCanonical();
+setOGUrl();
+
   loadReviews();
   initContactForm();
   setCurrentYear();
   document.dispatchEvent(new Event("components:loaded"));
 }
+
+
+function setCanonical() {
+  const link = document.getElementById("canonical-link");
+  if (!link) return;
+
+  link.setAttribute("href", window.location.origin + window.location.pathname);
+}
+
+function setOGUrl() {
+  const meta = document.getElementById("og-url");
+  if (!meta) return;
+
+  meta.setAttribute("content", window.location.href);
+}
+
 
 bootstrap();
