@@ -3,36 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'; img-src 'self' data: https://www.google.com https://maps.gstatic.com; connect-src 'self' https://formsubmit.co; frame-src https://www.google.com; form-action 'self' https://formsubmit.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests">
+
+  <!-- FIXED CSP -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https://www.google.com https://maps.gstatic.com; connect-src 'self' https://formsubmit.co; frame-src https://www.google.com; form-action 'self' https://formsubmit.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests">
+
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()">
+
   <title>The Brother's Gym | Gym in Darbhanga</title>
+
   <meta name="description" content="Join The Brother's Gym in Chowk, Allalpatti, Laheriasarai, Darbhanga. Affordable membership from Rs. 500/month, 20+ machines, friendly trainers, and easy WhatsApp and call support.">
   <meta name="keywords" content="Gym in Darbhanga, Affordable gym Darbhanga, The Brother's Gym, Gym in Laheriasarai, Budget gym Bihar, Fitness center Darbhanga">
+
   <meta name="robots" content="index, follow">
   <meta name="author" content="The Brother's Gym">
   <meta name="theme-color" content="#090909">
+
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="canonical" href="/index.html">
+
+  <!-- FIXED CANONICAL -->
+  <link rel="canonical" href="https://durgeshji619.github.io/The-Brothers-Gym/">
+
+  <!-- ADDED og:url -->
+  <meta property="og:url" content="https://durgeshji619.github.io/The-Brothers-Gym/">
+
   <meta property="og:title" content="The Brother's Gym | Transform Your Body">
   <meta property="og:description" content="Affordable local gym in Darbhanga with 20+ machines, beginner-friendly guidance, and budget pricing.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="assets/images/gym/gym-floor-4.jpg">
+
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="The Brother's Gym | Transform Your Body">
   <meta name="twitter:description" content="Affordable gym in Darbhanga with 20+ machines and helpful trainers.">
   <meta name="twitter:image" content="assets/images/gym/gym-floor-4.jpg">
+
   <link rel="preload" as="image" href="assets/images/gym/gym-floor-4.jpg">
+
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/animations.css">
   <link rel="stylesheet" href="assets/css/responsive.css">
+
+  <!-- FIXED JSON-LD -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Gym",
-      "name": "The Brother's Gym",
+      "name": "The Brothers Gym",
       "alternateName": "\u0925\u0947 \u092c\u094d\u0930\u0926\u0930\u0938 \u091c\u093f\u092e",
-      "url": "https://brothers-gym-website.local/index.html",
+      "url": "https://durgeshji619.github.io/The-Brothers-Gym/",
       "telephone": "+91 9534866694",
       "priceRange": "INR 500",
       "address": {
@@ -56,7 +74,7 @@
         "ratingValue": "4.3",
         "reviewCount": "38"
       },
-      "openingHours": "Mo-Sa Open 24 Hours"
+      "openingHours": "Mo-Sa 06:00-22:00"
     }
   </script>
 </head>
@@ -73,8 +91,8 @@
           <p class="hero-subtitle">The Brother's Gym <span lang="hi">(&#x0925;&#x0947; &#x092C;&#x094D;&#x0930;&#x0926;&#x0930;&#x0938; &#x091C;&#x093F;&#x092E;)</span> gives you strength training, machine workouts, and personal guidance in Chowk, Allalpatti at a price local families can afford.</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="pricing.html">Join Now</a>
-            <a class="btn btn-outline" data-phone-link href="contact.html#contact-details">Call Now</a>
-            <a class="btn btn-whatsapp" data-whatsapp-link href="contact.html#contact-details">WhatsApp</a>
+            <a class="btn btn-outline" href="tel:+919534866694">Call Now</a>
+            <a class="btn btn-whatsapp" href="https://wa.me/919534866694" target="_blank">WhatsApp</a>
           </div>
           <div class="hero-stats" aria-label="Business highlights">
             <article class="stat-card reveal reveal-up">
