@@ -3,26 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'; img-src 'self' data: https://www.google.com https://maps.gstatic.com; connect-src 'self' https://formsubmit.co; frame-src https://www.google.com; form-action 'self' https://formsubmit.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests">
+
+  <!-- FIXED CSP -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https://www.google.com https://maps.gstatic.com; connect-src 'self' https://formsubmit.co; frame-src https://www.google.com; form-action 'self' https://formsubmit.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests">
+
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()">
+
   <title>Contact The Brother's Gym | Join in Darbhanga</title>
+
   <meta name="description" content="Contact The Brother's Gym in Chowk, Allalpatti, Laheriasarai, Darbhanga. Call, WhatsApp, send an inquiry, and open the exact gym map location.">
   <meta name="keywords" content="Contact gym in Darbhanga, Brother's Gym phone, gym location Laheriasarai, WhatsApp gym Darbhanga">
+
   <meta name="robots" content="index, follow">
+
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="canonical" href="/contact.html">
+
+  <!-- FIXED CANONICAL -->
+  <link rel="canonical" href="https://durgeshji619.github.io/The-Brothers-Gym/contact.html">
+
+  <!-- ADDED og:url -->
+  <meta property="og:url" content="https://durgeshji619.github.io/The-Brothers-Gym/contact.html">
+
   <meta property="og:title" content="Contact The Brother's Gym | Darbhanga">
   <meta property="og:description" content="Call, WhatsApp, or send a direct membership inquiry to The Brother's Gym in Darbhanga.">
   <meta property="og:type" content="website">
+
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/animations.css">
   <link rel="stylesheet" href="assets/css/responsive.css">
 </head>
+
 <body data-page="contact">
   <div id="navbar"></div>
 
   <main>
+
     <section class="page-hero">
       <div class="container">
         <div class="page-hero-copy reveal reveal-up">
@@ -35,25 +51,32 @@
 
     <section class="section">
       <div class="container contact-layout">
+
         <div class="contact-panel reveal reveal-up" id="contact-details">
           <span class="section-tag">Direct contact</span>
           <h2>Get in touch</h2>
           <p>Fastest response usually comes from calling, sending a WhatsApp inquiry, or opening the exact Google Maps location link for the gym.</p>
+
           <div class="contact-links">
-            <a class="contact-link" data-phone-link href="#contact-form">
+
+            <!-- FIXED CALL -->
+            <a class="contact-link" href="tel:+919534866694">
               <img src="assets/icons/phone.svg" alt="Phone icon">
               <div>
                 <strong>Call the gym</strong>
-                <span data-phone-text>+91 95348 66694</span>
+                <span>+91 95348 66694</span>
               </div>
             </a>
-            <a class="contact-link" data-whatsapp-link href="#contact-form">
+
+            <!-- FIXED WHATSAPP -->
+            <a class="contact-link" href="https://wa.me/919534866694" target="_blank">
               <img src="assets/icons/whatsapp.svg" alt="WhatsApp icon">
               <div>
                 <strong>WhatsApp inquiry</strong>
                 <span>Quick join message ready for the gym</span>
               </div>
             </a>
+
             <a class="contact-link" href="https://maps.app.goo.gl/rqGLi2Bt9YrArmRo6" target="_blank" rel="noreferrer noopener">
               <img src="assets/icons/location.svg" alt="Location icon">
               <div>
@@ -61,6 +84,7 @@
                 <span>Chowk, Allalpatti, Laheriasarai, Darbhanga</span>
               </div>
             </a>
+
           </div>
 
           <div class="contact-card-grid">
@@ -78,36 +102,47 @@
         <div class="form-panel reveal reveal-left">
           <span class="section-tag">Membership inquiry</span>
           <h2>Send your details</h2>
+
           <form id="contact-form" action="https://formsubmit.co/ajax/durgeshjhaedits@gmail.com" method="POST" novalidate>
+
             <input type="hidden" name="_subject" value="The Brother's Gym Membership Inquiry">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
+
             <input type="text" name="_honey" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true">
+
             <div class="form-field">
               <label for="name">Your Name</label>
               <input id="name" name="name" type="text" placeholder="Enter your full name" required autocomplete="name" maxlength="80">
               <small class="error-text"></small>
             </div>
+
             <div class="form-field">
               <label for="email">Email Address</label>
               <input id="email" name="email" type="email" placeholder="Enter your email address" autocomplete="email" maxlength="120" inputmode="email" spellcheck="false">
               <small class="error-text"></small>
             </div>
+
             <div class="form-field">
               <label for="phone">Phone Number</label>
               <input id="phone" name="phone" type="tel" placeholder="Enter your mobile number" required inputmode="tel" autocomplete="tel" maxlength="15">
               <small class="error-text"></small>
             </div>
+
             <div class="form-field">
               <label for="message">Message</label>
               <textarea id="message" name="message" rows="5" placeholder="I want to know about monthly membership and gym timings." required maxlength="500"></textarea>
               <small class="error-text"></small>
             </div>
+
             <button type="submit" class="btn btn-primary btn-block">Send Inquiry</button>
+
             <p class="form-response" id="form-response" role="status" aria-live="polite"></p>
             <p class="footer-copy">Form submit hote hi inquiry details direct admin email par bheji jayengi.</p>
+
           </form>
         </div>
+
       </div>
     </section>
 
@@ -123,6 +158,7 @@
         </div>
       </div>
     </section>
+
   </main>
 
   <div id="cta"></div>
