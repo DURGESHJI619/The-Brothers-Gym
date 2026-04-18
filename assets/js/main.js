@@ -3,7 +3,7 @@ const BUSINESS = {
   phoneDisplay: "+91 95348 66694",
   phoneRaw: "+919534866694",
   whatsappRaw: "919534866694",
-  whatsappMessage: "I want to join your gym",
+  whatsappMessage: "Hi, I want to join The Brothers Gym. Please share details.",
   mapUrl: "https://maps.app.goo.gl/rqGLi2Bt9YrArmRo6",
   reviewsPath: "data/reviews.json",
   fallbackContactLink: "contact.html#contact-details"
@@ -68,8 +68,8 @@ const FALLBACK_COMPONENTS = {
         <div>
           <h3>Inquiry</h3>
           <ul class="footer-links">
-            <li><a data-phone-link href="contact.html#contact-details">Call the gym</a></li>
-            <li><a data-whatsapp-link href="contact.html#contact-details">WhatsApp inquiry</a></li>
+            <li><a data-phone-link href="#">Call the gym</a></li>
+            <li><a data-whatsapp-link href="#">WhatsApp inquiry</a></li>
             <li><a href="${BUSINESS.mapUrl}" target="_blank" rel="noreferrer noopener">Open map</a></li>
           </ul>
         </div>
@@ -89,8 +89,8 @@ const FALLBACK_COMPONENTS = {
         </div>
         <div class="cta-actions">
           <a class="btn btn-primary" href="pricing.html">See Membership</a>
-          <a class="btn btn-outline" data-phone-link href="contact.html#contact-details">Call Now</a>
-          <a class="btn btn-whatsapp" data-whatsapp-link href="contact.html#contact-details">WhatsApp</a>
+          <a class="btn btn-outline" data-phone-link href="#">Call Now</a>
+          <a class="btn btn-whatsapp" data-whatsapp-link href="#">WhatsApp</a>
         </div>
       </div>
     </section>
@@ -178,24 +178,17 @@ function initMobileNav() {
 }
 
 function applyContactLinks() {
-  const telHref = BUSINESS.phoneRaw ? `tel:${BUSINESS.phoneRaw}` : BUSINESS.fallbackContactLink;
-  const whatsappHref = BUSINESS.whatsappRaw
-    ? `https://wa.me/${BUSINESS.whatsappRaw}?text=${encodeURIComponent(BUSINESS.whatsappMessage)}`
-    : BUSINESS.fallbackContactLink;
+  const telHref = `tel:${BUSINESS.phoneRaw}`;
+  const whatsappHref = `https://wa.me/${BUSINESS.whatsappRaw}?text=${encodeURIComponent(BUSINESS.whatsappMessage)}`;
 
   document.querySelectorAll("[data-phone-link]").forEach((link) => {
     link.setAttribute("href", telHref);
-    if (!BUSINESS.phoneRaw) link.classList.add("is-config-pending");
   });
 
   document.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
     link.setAttribute("href", whatsappHref);
-    if (BUSINESS.whatsappRaw) {
-      link.setAttribute("target", "_blank");
-      link.setAttribute("rel", "noreferrer noopener");
-    } else {
-      link.classList.add("is-config-pending");
-    }
+    link.setAttribute("target", "_blank");
+    link.setAttribute("rel", "noreferrer noopener");
   });
 
   document.querySelectorAll("[data-phone-text]").forEach((node) => {
@@ -210,7 +203,9 @@ async function loadReviews() {
   try {
     const response = await fetch(BUSINESS.reviewsPath);
     if (!response.ok) throw new Error("Failed to load reviews");
-    renderReviews(container, await response.json());
+    const data = await response.json();
+    if (!Array.isArray(data)) throw new Error("Invalid review data");
+    renderReviews(container, data);
   } catch (error) {
     renderReviews(container, FALLBACK_REVIEWS);
     console.error(error);
@@ -244,9 +239,13 @@ function initContactForm() {
   if (!form) return;
 
   const responseNode = document.getElementById("form-response");
+
   const validators = {
     name: (value) => value.trim().length >= 2 ? "" : "Please enter your name.",
-    email: (value) => !value.trim() || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()) ? "" : "Enter a valid email address.",
+    email: (value) =>
+      value.trim().length > 0 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())
+        ? "Enter a valid email"
+        : "",
     phone: (value) => /^[6-9]\d{9}$/.test(value.replace(/\D/g, "").slice(-10)) ? "" : "Enter a valid 10-digit mobile number.",
     message: (value) => value.trim().length >= 10 ? "" : "Please enter a short message."
   };
@@ -263,6 +262,7 @@ function initContactForm() {
     event.preventDefault();
 
     let hasError = false;
+
     Object.keys(validators).forEach((key) => {
       const field = form.elements[key];
       if (!field) return;
@@ -277,10 +277,12 @@ function initContactForm() {
     }
 
     const formData = new FormData(form);
+
     if (formData.get("_honey")) {
       if (responseNode) responseNode.textContent = "Request blocked.";
       return;
     }
+
     const submitButton = form.querySelector('button[type="submit"]');
 
     if (responseNode) responseNode.textContent = "Sending your inquiry...";
@@ -293,23 +295,19 @@ function initContactForm() {
       const response = await fetch(form.action, {
         method: "POST",
         body: formData,
-        headers: {
-          Accept: "application/json"
-        }
+        headers: { Accept: "application/json" }
       });
 
-      if (!response.ok) {
-        throw new Error("Form submission failed");
-      }
+      if (!response.ok) throw new Error("Form submission failed");
 
       form.reset();
       form.querySelectorAll(".form-field").forEach((field) => field.classList.remove("has-error"));
-      form.querySelectorAll(".error-text").forEach((node) => {
-        node.textContent = "";
-      });
+      form.querySelectorAll(".error-text").forEach((node) => node.textContent = "");
+
       if (responseNode) {
         responseNode.textContent = "Inquiry sent successfully. We will contact you soon.";
       }
+
     } catch (error) {
       console.error(error);
       if (responseNode) {
@@ -336,9 +334,12 @@ async function bootstrap() {
     loadComponent("cta", "components/cta.html")
   ]);
 
-  setActiveNav();
-  initMobileNav();
-  applyContactLinks();
+  setTimeout(() => {
+    setActiveNav();
+    initMobileNav();
+    applyContactLinks();
+  }, 100);
+
   loadReviews();
   initContactForm();
   setCurrentYear();
