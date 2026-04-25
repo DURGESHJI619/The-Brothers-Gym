@@ -1,0 +1,20 @@
+[
+  {
+    "id": "transformation-1",
+    "image": "assets/images/transformations/transformation-1.jpg",
+    "alt": "Before and after transformation example for fat loss",
+    "caption": "Fat-loss focus with regular machine and cardio sessions"
+  },
+  {
+    "id": "transformation-2",
+    "image": "assets/images/transformations/transformation-2.jpg",
+    "alt": "Before and after transformation example for lean muscle gain",
+    "caption": "Lean muscle progress for members building strength slowly"
+  },
+  {
+    "id": "transformation-3",
+    "image": "assets/images/transformations/transformation-3.jpg",
+    "alt": "Before and after transformation example for strength and conditioning",
+    "caption": "Conditioning and body-shape improvement with trainer support"
+  }
+]

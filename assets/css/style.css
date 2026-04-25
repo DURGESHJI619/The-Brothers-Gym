@@ -146,6 +146,69 @@ h3 {
   font-size: clamp(1.45rem, 3vw, 2rem);
 }
 
+html[lang="hi"] body {
+  font-family: "Manrope", "Nirmala UI", sans-serif;
+}
+
+html[lang="hi"] h1,
+html[lang="hi"] h2,
+html[lang="hi"] h3,
+html[lang="hi"] .brand-mark,
+html[lang="hi"] .stat-card strong,
+html[lang="hi"] .price,
+html[lang="hi"] .section-tag,
+html[lang="hi"] .eyebrow,
+html[lang="hi"] .mini-label,
+html[lang="hi"] .panel-label,
+html[lang="hi"] .pricing-badge {
+  font-family: "Manrope", "Nirmala UI", sans-serif;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+html[lang="hi"] h1,
+html[lang="hi"] h2,
+html[lang="hi"] h3 {
+  line-height: 1.18;
+}
+
+html[lang="hi"] .section-tag,
+html[lang="hi"] .eyebrow,
+html[lang="hi"] .mini-label,
+html[lang="hi"] .panel-label,
+html[lang="hi"] .pricing-badge {
+  align-items: flex-start;
+}
+
+html[lang="hi"] .section-tag::before,
+html[lang="hi"] .eyebrow::before,
+html[lang="hi"] .panel-label::before {
+  margin-top: 0.7em;
+}
+
+html[lang="hi"] .brand-text strong,
+html[lang="hi"] .brand-text small,
+html[lang="hi"] .hero-subtitle,
+html[lang="hi"] .section-copy p,
+html[lang="hi"] .section-heading p,
+html[lang="hi"] .contact-link span,
+html[lang="hi"] .footer-copy,
+html[lang="hi"] .footer-links li,
+html[lang="hi"] .review-meta,
+html[lang="hi"] .gallery-card figcaption {
+  line-height: 1.75;
+}
+
+html[lang="hi"] .btn,
+html[lang="hi"] .lang-toggle,
+html[lang="hi"] .site-nav > a:not(.btn) {
+  line-height: 1.35;
+}
+
+html[lang="hi"] .review-meta {
+  align-items: flex-start;
+}
+
 .container {
   width: var(--container);
   margin-inline: auto;
@@ -300,14 +363,21 @@ h3 {
 .brand-mark {
   display: grid;
   place-items: center;
-  width: 3rem;
+  width: 4rem;
   aspect-ratio: 1;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--primary), #ff6c63);
+  overflow: hidden;
   color: var(--white);
   font-family: "Teko", sans-serif;
   font-size: 1.45rem;
   letter-spacing: 0.08em;
+}
+
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .brand-text strong,

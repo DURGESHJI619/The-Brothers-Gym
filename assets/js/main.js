@@ -3,21 +3,29 @@ const BUSINESS = {
   phoneDisplay: "+91 95348 66694",
   phoneRaw: "+919534866694",
   whatsappRaw: "919534866694",
-  whatsappMessage: "Hi, I want to join The Brothers Gym. Please share details.",
+  whatsappMessage: "Hi, I want to join The Brother's Gym. Please share the details.",
   mapUrl: "https://maps.app.goo.gl/rqGLi2Bt9YrArmRo6",
+  pricingPath: "data/pricing.json",
   reviewsPath: "data/reviews.json",
+  transformationsPath: "data/transformations.json",
   fallbackContactLink: "contact.html#contact-details"
 };
+
+let isSubmittingForm = false;
+let pricingCatalog = [];
+let transformationsCatalog = [];
 
 const FALLBACK_COMPONENTS = {
   "components/navbar.html": `
     <header class="site-header" id="site-header">
       <div class="container nav-shell">
         <a class="brand" href="index.html" aria-label="The Brother's Gym homepage">
-          <span class="brand-mark">BG</span>
+          <span class="brand-mark">
+            <img src="gym-logo.jpg" alt="The Brother's Gym logo">
+          </span>
           <span class="brand-text">
             <strong>The Brother's Gym</strong>
-            <small lang="hi">&#x0925;&#x0947; &#x092C;&#x094D;&#x0930;&#x0926;&#x0930;&#x0938; &#x091C;&#x093F;&#x092E;</small>
+            <small>Darbhanga, Bihar</small>
           </span>
         </a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation">
@@ -40,10 +48,12 @@ const FALLBACK_COMPONENTS = {
       <div class="container footer-grid">
         <div>
           <a class="brand footer-brand" href="index.html">
-            <span class="brand-mark">BG</span>
+            <span class="brand-mark">
+              <img src="gym-logo.jpg" alt="The Brother's Gym logo">
+            </span>
             <span class="brand-text">
               <strong>The Brother's Gym</strong>
-              <small lang="hi">&#x0925;&#x0947; &#x092C;&#x094D;&#x0930;&#x0926;&#x0930;&#x0938; &#x091C;&#x093F;&#x092E;</small>
+            <small>Darbhanga, Bihar</small>
             </span>
           </a>
           <p class="footer-copy">Affordable local fitness in Darbhanga with a focused workout setup, friendly trainers, and practical membership plans.</p>
@@ -59,7 +69,7 @@ const FALLBACK_COMPONENTS = {
         <div>
           <h3>Visit Us</h3>
           <ul class="footer-links">
-            <li>Chowk, Allalpatti, Laheriasarai</li>
+            <li>Allalpatti-Chowk, Laheriasarai</li>
             <li>Darbhanga, Bihar 846003</li>
             <li>Mon-Sat: Open 24 hours</li>
             <li>Sun: Closed</li>
@@ -128,6 +138,136 @@ const FALLBACK_REVIEWS = [
   }
 ];
 
+const FALLBACK_PRICING = [
+  {
+    id: "monthly",
+    featured: false,
+    showOnHome: true,
+    theme: "outline",
+    badge: "Starter",
+    pageBadge: "Most accessible",
+    title: "Monthly Plan",
+    homeTitle: "Monthly",
+    price: {
+      amount: "Rs. 500",
+      prefix: "",
+      suffix: "/month"
+    },
+    homeDescription: "Perfect for members beginning their daily workout habit.",
+    description: [
+      "Full access to main gym area",
+      "Suitable for daily local members",
+      "Basic trainer guidance available"
+    ],
+    cta: {
+      label: "Join Monthly",
+      href: "contact.html#contact-form"
+    }
+  },
+  {
+    id: "quarterly",
+    featured: true,
+    showOnHome: true,
+    theme: "primary",
+    badge: "Best value",
+    pageBadge: "Save more",
+    title: "Quarterly Plan",
+    homeTitle: "Quarterly",
+    price: {
+      amount: "Rs. 1,350",
+      prefix: "",
+      suffix: "/3 months"
+    },
+    homeDescription: "Save more while staying consistent over a longer routine.",
+    description: [
+      "Lower effective monthly cost",
+      "Good for committed training",
+      "Recommended for visible progress"
+    ],
+    cta: {
+      label: "Choose Quarterly",
+      href: "contact.html#contact-form"
+    }
+  },
+  {
+    id: "personal-training",
+    featured: false,
+    showOnHome: true,
+    theme: "outline",
+    badge: "Add-on",
+    pageBadge: "Focused support",
+    title: "Personal Training",
+    homeTitle: "Personal Training",
+    price: {
+      amount: "Rs. 1,999",
+      prefix: "From ",
+      suffix: "/month"
+    },
+    homeDescription: "Extra hands-on support for focused goals and faster structure.",
+    description: [
+      "Goal-specific workout support",
+      "Extra trainer attention",
+      "Best for fat loss and routine structure"
+    ],
+    cta: {
+      label: "Ask About PT",
+      href: "contact.html#contact-form"
+    }
+  }
+];
+
+const FALLBACK_TRANSFORMATIONS = [
+  {
+    id: "transformation-1",
+    image: "assets/images/transformations/transformation-1.jpg",
+    alt: "Before and after transformation example for fat loss",
+    caption: "Fat-loss focus with regular machine and cardio sessions"
+  },
+  {
+    id: "transformation-2",
+    image: "assets/images/transformations/transformation-2.jpg",
+    alt: "Before and after transformation example for lean muscle gain",
+    caption: "Lean muscle progress for members building strength slowly"
+  },
+  {
+    id: "transformation-3",
+    image: "assets/images/transformations/transformation-3.jpg",
+    alt: "Before and after transformation example for strength and conditioning",
+    caption: "Conditioning and body-shape improvement with trainer support"
+  }
+];
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function englishOnlyValue(value) {
+  if (Array.isArray(value)) return value;
+  if (value && typeof value === "object") {
+    return value.en ?? value.default ?? "";
+  }
+
+  return value ?? "";
+}
+
+async function loadJsonData(path, fallbackData) {
+  try {
+    const response = await fetch(path);
+    if (!response.ok) throw new Error(`Failed to load ${path}`);
+    const data = await response.json();
+    if (!Array.isArray(data)) throw new Error(`Invalid JSON data for ${path}`);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return fallbackData;
+  }
+}
+
 async function loadComponent(targetId, path) {
   const target = document.getElementById(targetId);
   if (!target) return;
@@ -158,6 +298,15 @@ function setActiveNav() {
   });
 }
 
+function updateNavToggleLabel() {
+  const header = document.getElementById("site-header");
+  const toggle = document.querySelector(".nav-toggle");
+  if (!header || !toggle) return;
+
+  const label = header.classList.contains("nav-open") ? "Close navigation" : "Open navigation";
+  toggle.setAttribute("aria-label", label);
+}
+
 function initMobileNav() {
   const header = document.getElementById("site-header");
   const toggle = document.querySelector(".nav-toggle");
@@ -167,14 +316,19 @@ function initMobileNav() {
   toggle.addEventListener("click", () => {
     const isOpen = header.classList.toggle("nav-open");
     toggle.setAttribute("aria-expanded", String(isOpen));
+    updateNavToggleLabel();
   });
 
   nav.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
+      if (!header.classList.contains("nav-open")) return;
       header.classList.remove("nav-open");
       toggle.setAttribute("aria-expanded", "false");
+      updateNavToggleLabel();
     });
   });
+
+  updateNavToggleLabel();
 }
 
 function applyContactLinks() {
@@ -196,6 +350,69 @@ function applyContactLinks() {
   });
 }
 
+function renderHomePricing(cards) {
+  const container = document.getElementById("home-pricing-list");
+  if (!container) return;
+
+  const homeCards = cards.filter((card) => card.showOnHome !== false);
+
+  container.innerHTML = homeCards.map((card, index) => `
+    <article class="pricing-card${card.featured ? " featured" : ""} reveal reveal-up" ${index > 0 ? `data-delay="${index * 120}"` : ""}>
+      <span class="pricing-badge">${escapeHtml(englishOnlyValue(card.badge))}</span>
+      <h3>${escapeHtml(englishOnlyValue(card.homeTitle || card.title))}</h3>
+      <p class="price">${escapeHtml(`${englishOnlyValue(card.price?.prefix)}${card.price?.amount || ""}`)}<span>${escapeHtml(englishOnlyValue(card.price?.suffix))}</span></p>
+      <p>${escapeHtml(englishOnlyValue(card.homeDescription))}</p>
+    </article>
+  `).join("");
+}
+
+function renderPricingPage(cards) {
+  const container = document.getElementById("pricing-page-list");
+  if (!container) return;
+
+  container.innerHTML = cards.map((card, index) => `
+    <article class="pricing-card${card.featured ? " featured" : ""} reveal reveal-up" ${index > 0 ? `data-delay="${index * 120}"` : ""}>
+      <span class="pricing-badge">${escapeHtml(englishOnlyValue(card.pageBadge || card.badge))}</span>
+      <h3>${escapeHtml(englishOnlyValue(card.title))}</h3>
+      <p class="price">${escapeHtml(`${englishOnlyValue(card.price?.prefix)}${card.price?.amount || ""}`)}<span>${escapeHtml(englishOnlyValue(card.price?.suffix))}</span></p>
+      <ul class="plan-list">
+        ${(englishOnlyValue(card.description) || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+      </ul>
+      <a class="btn ${card.theme === "primary" ? "btn-primary" : "btn-outline"} btn-block" href="${escapeHtml(card.cta?.href || BUSINESS.fallbackContactLink)}">${escapeHtml(englishOnlyValue(card.cta?.label))}</a>
+    </article>
+  `).join("");
+}
+
+function renderTransformations(items) {
+  const container = document.getElementById("home-transformations-list");
+  if (!container) return;
+
+  container.innerHTML = items.map((item, index) => `
+    <figure class="gallery-card reveal reveal-up" ${index > 0 ? `data-delay="${index * 120}"` : ""}>
+      <img src="${escapeHtml(item.image || "")}" alt="${escapeHtml(englishOnlyValue(item.alt))}" loading="lazy">
+      <figcaption>${escapeHtml(englishOnlyValue(item.caption))}</figcaption>
+    </figure>
+  `).join("");
+}
+
+function renderEditableContent() {
+  renderHomePricing(pricingCatalog);
+  renderPricingPage(pricingCatalog);
+  renderTransformations(transformationsCatalog);
+  document.dispatchEvent(new Event("components:loaded"));
+}
+
+async function loadEditableContent() {
+  const [pricingData, transformationData] = await Promise.all([
+    loadJsonData(BUSINESS.pricingPath, FALLBACK_PRICING),
+    loadJsonData(BUSINESS.transformationsPath, FALLBACK_TRANSFORMATIONS)
+  ]);
+
+  pricingCatalog = pricingData;
+  transformationsCatalog = transformationData;
+  renderEditableContent();
+}
+
 async function loadReviews() {
   const container = document.getElementById("reviews-list");
   if (!container) return;
@@ -213,25 +430,37 @@ async function loadReviews() {
 }
 
 function renderReviews(container, reviews) {
-  const escapeHtml = (value) => String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
+  container.innerHTML = reviews.map((review) => {
+    const body = englishOnlyValue(review.body);
 
-  container.innerHTML = reviews.map((review) => `
-    <article class="review-card reveal reveal-up">
-      <div class="stars" aria-label="${review.rating} star rating">${"&#9733;".repeat(review.rating)}</div>
-      <p>${escapeHtml(review.body)}</p>
-      <div class="review-meta">
-        <strong>${escapeHtml(review.author)}</strong>
-        <span>${escapeHtml(review.date)} &bull; ${escapeHtml(review.source)}</span>
-      </div>
-    </article>
-  `).join("");
+    return `
+      <article class="review-card reveal reveal-up">
+        <div class="stars" aria-label="${escapeHtml(`${review.rating} star rating`)}">${"&#9733;".repeat(review.rating)}</div>
+        <p>${escapeHtml(body)}</p>
+        <div class="review-meta">
+          <strong>${escapeHtml(review.author)}</strong>
+          <span>${escapeHtml(review.date)} &bull; ${escapeHtml(review.source)}</span>
+        </div>
+      </article>
+    `;
+  }).join("");
 
   document.dispatchEvent(new Event("components:loaded"));
+}
+
+function updateFormStateText() {
+  const submitButton = document.querySelector("[data-submit-label]");
+  if (submitButton) {
+    submitButton.textContent = isSubmittingForm ? "Sending..." : "Send Inquiry";
+  }
+}
+
+function setFieldState(field, message) {
+  const wrapper = field.closest(".form-field");
+  const errorNode = wrapper?.querySelector(".error-text");
+  if (!wrapper || !errorNode) return;
+  wrapper.classList.toggle("has-error", Boolean(message));
+  errorNode.textContent = message;
 }
 
 function initContactForm() {
@@ -244,18 +473,10 @@ function initContactForm() {
     name: (value) => value.trim().length >= 2 ? "" : "Please enter your name.",
     email: (value) =>
       value.trim().length > 0 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())
-        ? "Enter a valid email"
+        ? "Enter a valid email address."
         : "",
     phone: (value) => /^[6-9]\d{9}$/.test(value.replace(/\D/g, "").slice(-10)) ? "" : "Enter a valid 10-digit mobile number.",
     message: (value) => value.trim().length >= 10 ? "" : "Please enter a short message."
-  };
-
-  const setFieldState = (field, message) => {
-    const wrapper = field.closest(".form-field");
-    const errorNode = wrapper?.querySelector(".error-text");
-    if (!wrapper || !errorNode) return;
-    wrapper.classList.toggle("has-error", Boolean(message));
-    errorNode.textContent = message;
   };
 
   form.addEventListener("submit", async (event) => {
@@ -283,13 +504,12 @@ function initContactForm() {
       return;
     }
 
+    isSubmittingForm = true;
+    updateFormStateText();
     const submitButton = form.querySelector('button[type="submit"]');
 
     if (responseNode) responseNode.textContent = "Sending your inquiry...";
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.textContent = "Sending...";
-    }
+    if (submitButton) submitButton.disabled = true;
 
     try {
       const response = await fetch(form.action, {
@@ -302,22 +522,22 @@ function initContactForm() {
 
       form.reset();
       form.querySelectorAll(".form-field").forEach((field) => field.classList.remove("has-error"));
-      form.querySelectorAll(".error-text").forEach((node) => node.textContent = "");
+      form.querySelectorAll(".error-text").forEach((node) => {
+        node.textContent = "";
+      });
 
       if (responseNode) {
         responseNode.textContent = "Inquiry sent successfully. We will contact you soon.";
       }
-
     } catch (error) {
       console.error(error);
       if (responseNode) {
-        responseNode.textContent = "Inquiry send nahi ho paayi. Thoda der baad phir try kariye.";
+        responseNode.textContent = "Inquiry could not be sent. Please try again in a little while.";
       }
     } finally {
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.textContent = "Send Inquiry";
-      }
+      isSubmittingForm = false;
+      updateFormStateText();
+      if (submitButton) submitButton.disabled = false;
     }
   });
 }
@@ -327,42 +547,53 @@ function setCurrentYear() {
   if (yearNode) yearNode.textContent = new Date().getFullYear();
 }
 
-async function bootstrap() {
-  await Promise.all([
-    loadComponent("navbar", "components/navbar.html"),
-    loadComponent("footer", "components/footer.html"),
-    loadComponent("cta", "components/cta.html")
-  ]);
-
-  setTimeout(() => {
-    setActiveNav();
-    initMobileNav();
-    applyContactLinks();
-  }, 100);
-
-setCanonical();
-setOGUrl();
-
-  loadReviews();
-  initContactForm();
-  setCurrentYear();
-  document.dispatchEvent(new Event("components:loaded"));
-}
-
-
 function setCanonical() {
   const link = document.getElementById("canonical-link");
   if (!link) return;
-
   link.setAttribute("href", window.location.origin + window.location.pathname);
 }
 
 function setOGUrl() {
   const meta = document.getElementById("og-url");
   if (!meta) return;
-
   meta.setAttribute("content", window.location.href);
 }
 
+function updateStructuredData() {
+  const schemaNode = document.querySelector('script[type="application/ld+json"]');
+  if (!schemaNode) return;
+
+  try {
+    const data = JSON.parse(schemaNode.textContent);
+    data.name = BUSINESS.name;
+    data.alternateName = BUSINESS.name;
+    schemaNode.textContent = JSON.stringify(data, null, 6);
+  } catch (error) {
+    console.error("Failed to update structured data", error);
+  }
+}
+
+async function bootstrap() {
+  document.documentElement.lang = "en";
+
+  await Promise.all([
+    loadComponent("navbar", "components/navbar.html"),
+    loadComponent("footer", "components/footer.html"),
+    loadComponent("cta", "components/cta.html")
+  ]);
+
+  setActiveNav();
+  initMobileNav();
+  await loadEditableContent();
+  applyContactLinks();
+  setCanonical();
+  setOGUrl();
+  updateStructuredData();
+
+  loadReviews();
+  initContactForm();
+  setCurrentYear();
+  document.dispatchEvent(new Event("components:loaded"));
+}
 
 bootstrap();

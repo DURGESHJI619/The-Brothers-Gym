@@ -1,0 +1,77 @@
+[
+  {
+    "id": "monthly",
+    "featured": false,
+    "showOnHome": true,
+    "theme": "outline",
+    "badge": "Starter",
+    "pageBadge": "Most accessible",
+    "title": "Monthly Plan",
+    "homeTitle": "Monthly",
+    "price": {
+      "amount": "Rs. 500",
+      "suffix": "/month",
+      "prefix": ""
+    },
+    "homeDescription": "Perfect for members beginning their daily workout habit.",
+    "description": [
+      "Full access to main gym area",
+      "Suitable for daily local members",
+      "Basic trainer guidance available"
+    ],
+    "cta": {
+      "label": "Join Monthly",
+      "href": "contact.html#contact-form"
+    }
+  },
+  {
+    "id": "quarterly",
+    "featured": true,
+    "showOnHome": true,
+    "theme": "primary",
+    "badge": "Best value",
+    "pageBadge": "Save more",
+    "title": "Quarterly Plan",
+    "homeTitle": "Quarterly",
+    "price": {
+      "amount": "Rs. 1,350",
+      "suffix": "/3 months",
+      "prefix": ""
+    },
+    "homeDescription": "Save more while staying consistent over a longer routine.",
+    "description": [
+      "Lower effective monthly cost",
+      "Good for committed training",
+      "Recommended for visible progress"
+    ],
+    "cta": {
+      "label": "Choose Quarterly",
+      "href": "contact.html#contact-form"
+    }
+  },
+  {
+    "id": "personal-training",
+    "featured": false,
+    "showOnHome": true,
+    "theme": "outline",
+    "badge": "Add-on",
+    "pageBadge": "Focused support",
+    "title": "Personal Training",
+    "homeTitle": "Personal Training",
+    "price": {
+      "amount": "Rs. 1,999",
+      "suffix": "/month",
+      "prefix": "From "
+    },
+    "homeDescription": "Extra hands-on support for focused goals and faster structure.",
+    "description": [
+      "Goal-specific workout support",
+      "Extra trainer attention",
+      "Best for fat loss and routine structure"
+    ],
+    "cta": {
+      "label": "Ask About PT",
+      "href": "contact.html#contact-form"
+    }
+  }
+]
